@@ -23,7 +23,7 @@ class PomodoroTimer:
         main_frame = ttk.Frame(self.root)
         main_frame.pack(padx=10, pady=10, fill="both", expand=True)
 
-        self.timer_display = ttk.Label(main_frame, text="25:00", font=("TkDefaultFont", 20), fg="000000")
+        self.timer_display = ttk.Label(main_frame, text="25:00", font=("TkDefaultFont", 20))
         self.timer_display.grid(row=0, column=0, rowspan=3, sticky="w", padx=(0, 20))
 
         self.start_button = ttk.Button(main_frame, text="Start", command=self.start_timer)
