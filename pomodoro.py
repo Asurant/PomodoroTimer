@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 from ttkbootstrap import ttk, Style
 
-WORK_DURATION = 25 *60
+WORK_DURATION = 25 * 60
 SHORT_BREAK_DURATION = 5 * 60
 LONG_BREAK_DURATION = 30 * 60
 
@@ -10,20 +10,30 @@ LONG_BREAK_DURATION = 30 * 60
 class PomodoroTimer:
     def __init__(self):
         self.root = tk.Tk()
-        self.root.geometry("250x200")
+        self.root.geometry("225x120")
         self.root.title("Pomodoro Timer")
         self.root.resizable(False, False)
+        self.root.attributes("-topmost", True)
 
         self.style = Style(theme="simplex")
 
-        self.timer_display = ttk.Label(self.root, text="25:00", font=("TkDefaultFont", 40))
-        self.timer_display.pack(pady=20)
+        self.opacity_level = 1.0
 
-        self.start_button = ttk.Button(self.root, text="Start", command=self.start_timer)
-        self.start_button.pack(pady=5)
 
-        self.stop_button = ttk.Button(self.root, text="Stop", command=self.stop_timer, state=tk.DISABLED)
-        self.stop_button.pack(pady=5)
+        main_frame = ttk.Frame(self.root)
+        main_frame.pack(padx=10, pady=10, fill="both", expand=True)
+
+        self.timer_display = ttk.Label(main_frame, text="25:00", font=("TkDefaultFont", 20), fg="000000")
+        self.timer_display.grid(row=0, column=0, rowspan=3, sticky="w", padx=(0, 20))
+
+        self.start_button = ttk.Button(main_frame, text="Start", command=self.start_timer)
+        self.start_button.grid(row=0, column=1, sticky="ew")
+
+        self.stop_button = ttk.Button(main_frame, text="Stop", command=self.stop_timer, state=tk.DISABLED)
+        self.stop_button.grid(row=1, column=1, sticky="ew")
+
+        self.opacity_button = ttk.Button(main_frame, text="Opacity: 100%", command=self.change_opacity)
+        self.opacity_button.grid(row=2, column=1, sticky="ew")
 
         self.reset_timer()
 
@@ -48,6 +58,15 @@ class PomodoroTimer:
         self.is_timer_running = False
         self.start_button.config(state=tk.NORMAL)
         self.stop_button.config(state=tk.DISABLED)
+
+    def change_opacity(self):
+        self.opacity_level -= 0.25
+        if self.opacity_level <= 0:
+            self.opacity_level = 1.0
+
+        opacity_percent = int(self.opacity_level * 100)
+        self.root.attributes("-alpha", self.opacity_level)
+        self.opacity_button.config(text=f"Opacity: {opacity_percent}%")
 
     def countdown(self):
         if self.is_timer_running:
